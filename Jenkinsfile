@@ -1,35 +1,26 @@
-pipeline {
+ pipeline {
     agent any
-
     stages {
         stage('Build') {
             steps {
-                echo 'Building the application...'
-                sh 'ls -l'
+                echo 'Building application...'
             }
         }
-
-        stage('Test') {
-            steps {
-                echo 'Running tests...'
-                sh 'echo "This is a dummy test step"'
+        stage('Test in Parallel') {
+            parallel {
+                stage('Unit Tests') {
+                    steps {
+                        echo 'Running unit tests...'
+                        sh 'sleep 5'
+                    }
+                }
+                stage('Integration Tests') {
+                    steps {
+                        echo 'Running integration tests...'
+                        sh 'sleep 5'
+                    }
+                }
             }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying the application...'
-                sh 'echo "Deploy step executed"'
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'Pipeline completed successfully 🎉'
-        }
-        failure {
-            echo 'Pipeline failed ❌'
         }
     }
 }
